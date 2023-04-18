@@ -1,11 +1,29 @@
 // server/index.js
 
-const express = require("express");
+import express from 'express'
 
-const PORT = process.env.PORT || 3001;
+import * as auth from './authentication/index.js'
 
-const app = express();
+import { AuthData } from './authentication/model.js'
+
+const PORT = process.env.PORT || 3001
+
+const app = express()
 
 app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-});
+  console.log('HELLO MY DUDES!')
+})
+
+app.get('/api', (req, res) => {
+  console.log(req)
+  res.json({ hello: 'henlo', query: req.query, params: req.params })
+})
+
+app.get('/', (req, res) => {
+  res.json({ message: 'mafia-clicker', version: '1.0.0' })
+})
+
+app.get('/auth', (req, res) => {
+  const result = auth.authenticate(req.query)
+  res.json({ isUser: result })
+})
