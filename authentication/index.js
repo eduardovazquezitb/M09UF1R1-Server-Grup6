@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import { AuthData } from './model.js'
+import AuthData from './model/AuthData.js'
 
 export function authenticate (params) {
   // check if params has the correct json structure
@@ -8,14 +8,15 @@ export function authenticate (params) {
   const authData = new AuthData(params.mail, params.password)
 
   // check if data file contains user
-  fs.readFile('./authentication/data.json', (err, file) => {
-    if (err) return console.error(err)
-    const data = JSON.parse(file)
-    data.forEach(user => {
-      if (authData.Equals(user)) { return true }
-    }
-    )
-  })
+  try {
+    const file = fs.readFileSync('./authentication/data.json')
 
-  return false
+    const database = JSON.parse(file)
+    return database.some(user =>
+      authData.Equals(user)
+    )
+  } catch (error) {
+    console.error(error)
+    return false
+  }
 }

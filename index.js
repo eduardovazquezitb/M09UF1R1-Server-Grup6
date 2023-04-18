@@ -4,19 +4,12 @@ import express from 'express'
 
 import * as auth from './authentication/index.js'
 
-import { AuthData } from './authentication/model.js'
-
 const PORT = process.env.PORT || 3001
 
 const app = express()
 
-app.listen(PORT, () => {
+app.listen(PORT, () => { // This is needed to bind to the socket and listen
   console.log('HELLO MY DUDES!')
-})
-
-app.get('/api', (req, res) => {
-  console.log(req)
-  res.json({ hello: 'henlo', query: req.query, params: req.params })
 })
 
 app.get('/', (req, res) => {
