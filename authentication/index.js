@@ -51,7 +51,7 @@ export function getUserData (params) {
     if (result.length > 0) {
       return { status: true, data: result[0] }
     }
-    return { status: true, isUser: false }
+    return MailDoesNotExist
   } catch (error) {
     console.error(error)
     return SomethingWentWrong
