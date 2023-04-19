@@ -1,9 +1,13 @@
 import fs from 'fs'
 
-import { AuthDataDto, UserRequestDto } from './model/index.js'
+import { AuthDataDto, GetUserRequestDto, CredentialsDto, UpdateUsernameDto } from './model/index.js'
 
-const InvalidQuery = { status: false, message: 'Invalid Query' }
-const SomethingWentWrong = { status: false, message: 'Something Went Wrong' }
+const InvalidQuery = { status: false, error: 422, message: 'Invalid Query Parameters' }
+const MailIsTaken = { status: false, error: 422, message: 'Mail Is Taken' }
+const MailDoesNotExist = { status: false, error: 422, message: 'Mail Does Not Exist' }
+const SomethingWentWrong = { status: false, error: 500, message: 'Internal Error' }
+
+const dataPath = './authentication/data.json'
 
 export function authenticate (params) {
   // check if params has the correct json structure
@@ -15,13 +19,13 @@ export function authenticate (params) {
 
   // check if data file contains user
   try {
-    const file = fs.readFileSync('./authentication/data.json')
+    const file = fs.readFileSync(dataPath)
 
     const database = JSON.parse(file)
     const result = database.some(user =>
       authData.Equals(user)
     )
-    return { status: true, isUser: result }
+    return { status: true, data: { isUser: result } }
   } catch (error) {
     console.error(error)
     return SomethingWentWrong
@@ -30,22 +34,22 @@ export function authenticate (params) {
 
 export function getUserData (params) {
   // check if params has the correct json structure
-  if (!UserRequestDto.typeOf(params)) {
+  if (!GetUserRequestDto.typeOf(params)) {
     return InvalidQuery
   }
 
-  const userRequestDto = new UserRequestDto(params)
+  const getUserRequestDto = new GetUserRequestDto(params)
 
   // check if data file contains user
   try {
-    const file = fs.readFileSync('./authentication/data.json')
+    const file = fs.readFileSync(dataPath)
 
     const database = JSON.parse(file)
     const result = database.filter(user =>
-      user.mail === userRequestDto.mail
+      user.mail === getUserRequestDto.mail
     )
     if (result.length > 0) {
-      return { status: true, isUser: true, data: result[0] }
+      return { status: true, data: result[0] }
     }
     return { status: true, isUser: false }
   } catch (error) {
@@ -56,12 +60,58 @@ export function getUserData (params) {
 
 export function getAllUsersData () {
   try {
-    const file = fs.readFileSync('./authentication/data.json')
+    const file = fs.readFileSync(dataPath)
 
     const database = JSON.parse(file)
     return { status: true, data: database }
   } catch (error) {
     console.error(error)
+    return SomethingWentWrong
+  }
+}
+
+export function createNewUser (params) {
+  // check if params has the correct json structure
+  if (!CredentialsDto.typeOf(params)) {
+    return InvalidQuery
+  }
+
+  const credentialsDto = new CredentialsDto(params)
+
+  try {
+    const file = fs.readFileSync(dataPath)
+    const database = JSON.parse(file)
+    if (database.some(user => user.mail === credentialsDto.mail)) {
+      return MailIsTaken
+    }
+    database.push(credentialsDto)
+    fs.writeFileSync(dataPath, JSON.stringify(database))
+    return { status: true, data: {} }
+  } catch (error) {
+    return SomethingWentWrong
+  }
+}
+
+export function updateUsername (params) {
+  // check if params has the correct json structure
+  if (!UpdateUsernameDto.typeOf(params)) {
+    return InvalidQuery
+  }
+
+  const queryParams = new UpdateUsernameDto(params)
+
+  try {
+    const file = fs.readFileSync(dataPath)
+    const database = JSON.parse(file)
+    const target = database.filter(user => user.mail === queryParams.mail)
+    if (target.length === 0) {
+      return MailDoesNotExist
+    }
+    const newusername = queryParams.newusername.toString().replace(/[^a-z0-9]/gi, '')
+    target[0].username = newusername
+    fs.writeFileSync(dataPath, JSON.stringify(database))
+    return { status: true, data: { newusername } }
+  } catch (error) {
     return SomethingWentWrong
   }
 }

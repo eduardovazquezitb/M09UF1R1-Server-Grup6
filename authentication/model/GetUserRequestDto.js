@@ -1,7 +1,9 @@
 const example =
-{ mail: 'elibi.json', username: 'ibi', password: 'eljuego', superuser: true }
+{
+  mail: 'email@gmail.com'
+}
 
-export default class CredentialsDto {
+export default class GetUserRequestDto {
   constructor (params) {
     Object.keys(example).forEach(key => {
       this[key] = params[key]
@@ -9,7 +11,7 @@ export default class CredentialsDto {
   }
 
   Equals (object) {
-    if (!CredentialsDto.typeOf(object)) {
+    if (!GetUserRequestDto.typeOf(object)) {
       return false
     }
     if (Object.keys(example).some(key =>

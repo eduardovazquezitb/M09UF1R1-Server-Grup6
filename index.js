@@ -11,6 +11,14 @@ const app = express()
 
 app.use(bodyParser.json())
 
+function handleResult (res, result) {
+  if (!result.status) {
+    res.status(result.error).send(result.message)
+  } else {
+    res.json(result.data)
+  }
+}
+
 app.listen(PORT, () => { // This is needed to bind to the socket and listen
   console.log('HELLO MY DUDES!')
 })
@@ -20,16 +28,26 @@ app.get('/', (req, res) => {
 })
 
 app.get('/auth', (req, res) => {
-  const result = auth.authenticate(req.query)
-  res.json(result)
+  const result = auth.authenticate(req.body)
+  handleResult(res, result)
 })
 
 app.get('/user', (req, res) => {
-  const result = auth.getUserData(req.query)
-  res.json(result)
+  const result = auth.getUserData(req.body)
+  handleResult(res, result)
 })
 
 app.get('/users', (req, res) => {
   const result = auth.getAllUsersData()
-  res.json(result)
+  handleResult(res, result)
+})
+
+app.post('/newUser', (req, res) => {
+  const result = auth.createNewUser(req.body)
+  handleResult(res, result)
+})
+
+app.put('/changeUsername', (req, res) => {
+  const result = auth.updateUsername(req.body)
+  handleResult(res, result)
 })

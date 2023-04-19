@@ -1,9 +1,10 @@
 const example =
 {
-  mail: 'email@gmail.com'
+  mail: 'email@gmail.com',
+  newusername: 'a'
 }
 
-export default class UserRequestDto {
+export default class UpdateUsernameDto {
   constructor (params) {
     Object.keys(example).forEach(key => {
       this[key] = params[key]
@@ -11,7 +12,7 @@ export default class UserRequestDto {
   }
 
   Equals (object) {
-    if (!UserRequestDto.typeOf(object)) {
+    if (!UpdateUsernameDto.typeOf(object)) {
       return false
     }
     if (Object.keys(example).some(key =>
