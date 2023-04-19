@@ -1,4 +1,4 @@
-class Credentials {
+class CredentialsDto {
   constructor (mail, username, password, superuser) {
     this.mail = mail
     this.username = username
