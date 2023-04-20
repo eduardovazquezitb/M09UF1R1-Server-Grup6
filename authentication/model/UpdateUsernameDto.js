@@ -12,7 +12,7 @@ export default class UpdateUsernameDto {
   }
 
   Equals (object) {
-    if (!this.typeOf(object)) {
+    if (!UpdateUsernameDto.typeOf(object)) {
       return false
     }
     if (Object.keys(example).some(key =>

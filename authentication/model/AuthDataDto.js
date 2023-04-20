@@ -12,7 +12,7 @@ export default class AuthDataDto {
   }
 
   Equals (object) {
-    if (!this.typeOf(object)) {
+    if (!AuthDataDto.typeOf(object)) {
       return false
     }
     if (Object.keys(example).some(key =>

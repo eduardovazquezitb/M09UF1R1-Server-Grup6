@@ -9,7 +9,7 @@ export default class CredentialsDto {
   }
 
   Equals (object) {
-    if (!this.typeOf(object)) {
+    if (!CredentialsDto.typeOf(object)) {
       return false
     }
     if (Object.keys(example).some(key =>

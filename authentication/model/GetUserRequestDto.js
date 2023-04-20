@@ -11,7 +11,7 @@ export default class GetUserRequestDto {
   }
 
   Equals (object) {
-    if (!this.typeOf(object)) {
+    if (!GetUserRequestDto.typeOf(object)) {
       return false
     }
     if (Object.keys(example).some(key =>
