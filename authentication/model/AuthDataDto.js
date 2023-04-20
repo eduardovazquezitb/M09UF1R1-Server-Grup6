@@ -12,7 +12,7 @@ export default class AuthDataDto {
   }
 
   Equals (object) {
-    if (!AuthDataDto.typeOf(object)) {
+    if (!this.typeOf(object)) {
       return false
     }
     if (Object.keys(example).some(key =>
@@ -28,7 +28,8 @@ export default class AuthDataDto {
       return false
     }
     if (Object.keys(example).some(key =>
-      !Object.prototype.hasOwnProperty.call(object, key)
+      !Object.prototype.hasOwnProperty.call(object, key) ||
+      typeof (object[key]) !== typeof (example[key])
     )) {
       return false
     }

@@ -1,10 +1,13 @@
 import fs from 'fs'
 
+import { removeWierdCharacters } from '../helpers/removeWeirdCharacters.js'
+import { hasWeirdCharacters } from '../helpers/hasWierdCharacters.js'
 import { AuthDataDto, GetUserRequestDto, CredentialsDto, UpdateUsernameDto } from './model/index.js'
 
 const InvalidQuery = { status: false, error: 422, message: 'Invalid Query Parameters' }
 const MailIsTaken = { status: false, error: 422, message: 'Mail Is Taken' }
 const MailDoesNotExist = { status: false, error: 422, message: 'Mail Does Not Exist' }
+const InvalidCredentials = { status: false, error: 422, message: 'Invalid Credentials' }
 const SomethingWentWrong = { status: false, error: 500, message: 'Internal Error' }
 
 const dataPath = './authentication/data.json'
@@ -84,6 +87,10 @@ export function createNewUser (params) {
     if (database.some(user => user.mail === credentialsDto.mail)) {
       return MailIsTaken
     }
+    if (hasWeirdCharacters(credentialsDto.password) || hasWeirdCharacters(credentialsDto.mail)) {
+      return InvalidCredentials
+    }
+    credentialsDto.username = removeWierdCharacters(credentialsDto.username)
     database.push(credentialsDto)
     fs.writeFileSync(dataPath, JSON.stringify(database))
     return { status: true, data: {} }
@@ -107,7 +114,7 @@ export function updateUsername (params) {
     if (target.length === 0) {
       return MailDoesNotExist
     }
-    const newusername = queryParams.newusername.toString().replace(/[^a-z0-9]/gi, '')
+    const newusername = removeWierdCharacters(queryParams.newusername)
     target[0].username = newusername
     fs.writeFileSync(dataPath, JSON.stringify(database))
     return { status: true, data: { newusername } }
