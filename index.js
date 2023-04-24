@@ -4,6 +4,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 
 import * as auth from './authentication/index.js'
+import * as ranking from './ranking/index.js'
 import { handleHttpResult } from './helpers/index.js'
 
 const PORT = process.env.PORT || 3001
@@ -42,5 +43,15 @@ app.post('/newUser', (req, res) => {
 
 app.put('/changeUsername', (req, res) => {
   const result = auth.updateUsername(req.body)
+  handleHttpResult(res, result)
+})
+
+app.put('/updateScore', (req, res) => {
+  const result = ranking.updatePosition(req.body)
+  handleHttpResult(res, result)
+})
+
+app.delete('/deleteScore', (req, res) => {
+  const result = ranking.deletePositionScore(req.body)
   handleHttpResult(res, result)
 })
