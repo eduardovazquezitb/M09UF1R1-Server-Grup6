@@ -2,6 +2,7 @@ import fs from 'fs'
 
 import { hasWeirdCharacters, removeWeirdCharacters } from '../helpers/index.js'
 import { AuthDataDto, GetUserRequestDto, CredentialsDto, UpdateUsernameDto } from './model/index.js'
+import { createNewPosition } from '../ranking/index.js'
 
 const InvalidQuery = { status: false, error: 422, message: 'Invalid Query Parameters' }
 const MailIsTaken = { status: false, error: 422, message: 'Mail Is Taken' }
@@ -92,6 +93,12 @@ export function createNewUser (params) {
     credentialsDto.username = removeWeirdCharacters(credentialsDto.username)
     database.push(credentialsDto)
     fs.writeFileSync(dataPath, JSON.stringify(database))
+    const position =
+    {
+      mail: credentialsDto.mail,
+      score: 0
+    }
+    createNewPosition(position)
     return { status: true, data: {} }
   } catch (error) {
     return SomethingWentWrong
