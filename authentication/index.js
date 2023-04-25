@@ -25,10 +25,15 @@ export function authenticate (params) {
     const file = fs.readFileSync(dataPath)
 
     const database = JSON.parse(file)
-    const result = database.some(user =>
+    const result = database.filter(user =>
       authData.Equals(user)
     )
-    return { status: true, data: { isUser: result } }
+
+    const isUser = result.length > 0
+    let username = null
+    if (isUser) { username = result[0].username }
+
+    return { status: true, data: { isUser, username } }
   } catch (error) {
     console.error(error)
     return SomethingWentWrong
