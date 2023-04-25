@@ -21,12 +21,12 @@ app.get('/', (req, res) => {
   res.json({ message: 'mafia-clicker', version: '1.0.0' })
 })
 
-app.get('/auth', (req, res) => {
+app.post('/auth', (req, res) => {
   const result = auth.authenticate(req.body)
   handleHttpResult(res, result)
 })
 
-app.get('/user', (req, res) => {
+app.post('/user', (req, res) => {
   const result = auth.getUserData(req.body)
   handleHttpResult(res, result)
 })
