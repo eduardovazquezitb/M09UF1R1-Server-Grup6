@@ -104,7 +104,7 @@ export function createNewUser (params) {
       score: 0
     }
     createNewPosition(position)
-    return { status: true, data: {} }
+    return { status: true, data: { newusername: credentialsDto.username } }
   } catch (error) {
     return SomethingWentWrong
   }
