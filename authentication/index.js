@@ -100,6 +100,7 @@ export function createNewUser (params) {
     fs.writeFileSync(dataPath, JSON.stringify(database))
     const position =
     {
+      username: credentialsDto.username,
       mail: credentialsDto.mail,
       score: 0
     }

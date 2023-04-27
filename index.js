@@ -46,6 +46,11 @@ app.put('/changeUsername', (req, res) => {
   handleHttpResult(res, result)
 })
 
+app.get('/getRanking', (req, res) => {
+  const result = ranking.getWholeRanking(req.body)
+  handleHttpResult(res, result)
+})
+
 app.put('/updateScore', (req, res) => {
   const result = ranking.updatePosition(req.body)
   handleHttpResult(res, result)
