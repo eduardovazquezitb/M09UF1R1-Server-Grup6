@@ -45,7 +45,7 @@ export function updatePosition (params) {
     target[0].score += positionData.score
     sortListByScore(database)
     fs.writeFileSync(dataPath, JSON.stringify(database))
-    return { status: true, data: {} }
+    return { status: true, data: { mail: target[0].mail, score: target[0].score } }
   } catch (error) {
     return SomethingWentWrong
   }
