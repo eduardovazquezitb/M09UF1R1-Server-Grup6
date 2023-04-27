@@ -74,6 +74,16 @@ export function deletePositionScore (params) {
   }
 }
 
+export function getWholeRanking (params) {
+  try {
+    const file = fs.readFileSync(dataPath)
+    const database = JSON.parse(file)
+    return { status: true, data: database }
+  } catch (error) {
+    return SomethingWentWrong
+  }
+}
+
 function sortListByScore (list) {
   list.sort((a, b) => (a.score < b.score) ? 1 : -1)
   console.error(list)
