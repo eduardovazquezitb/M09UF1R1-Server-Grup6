@@ -1,6 +1,5 @@
 const example =
 {
-  username: 'elpibedeejemplo',
   mail: 'email@gmail.com',
   score: 0
 }

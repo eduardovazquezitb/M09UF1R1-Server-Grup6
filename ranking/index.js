@@ -74,7 +74,7 @@ export function deletePositionScore (params) {
   }
 }
 
-export function getWholeRanking (params) {
+export function getWholeRanking () {
   try {
     const file = fs.readFileSync(dataPath)
     const database = JSON.parse(file)
