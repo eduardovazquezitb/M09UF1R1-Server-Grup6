@@ -90,7 +90,6 @@ io.on('connection', (socket) => {
   socket.on('updateScore', (data) => {
     try {
       const input = JSON.parse(data)
-      console.log(input)
       const result = ranking.updatePosition(input)
       if (!result.status) throw getError(result)
       socket.emit('updateScore', result.data)

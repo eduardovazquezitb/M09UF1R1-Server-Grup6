@@ -86,5 +86,4 @@ export function getWholeRanking () {
 
 function sortListByScore (list) {
   list.sort((a, b) => (a.score < b.score) ? 1 : -1)
-  console.error(list)
 }

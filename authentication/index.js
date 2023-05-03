@@ -35,7 +35,7 @@ export function authenticate (params) {
 
     return { status: true, data: { isUser, username } }
   } catch (error) {
-    console.error(error)
+    console.log(error)
     return SomethingWentWrong
   }
 }
@@ -61,7 +61,7 @@ export function getUserData (params) {
     }
     return MailDoesNotExist
   } catch (error) {
-    console.error(error)
+    console.log(error)
     return SomethingWentWrong
   }
 }
@@ -73,7 +73,7 @@ export function getAllUsersData () {
     const database = JSON.parse(file)
     return { status: true, data: database }
   } catch (error) {
-    console.error(error)
+    console.log(error)
     return SomethingWentWrong
   }
 }
