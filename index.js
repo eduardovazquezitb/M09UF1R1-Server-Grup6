@@ -98,6 +98,17 @@ io.on('connection', (socket) => {
     }
   })
 
+  socket.on('deleteScore', (data) => {
+    try {
+      const input = JSON.parse(data)
+      const result = ranking.deletePositionScore(input)
+      if (!result.status) throw getError(result)
+      socket.emit('deleteScore')
+    } catch (error) {
+      socket.emit('deleteScore', error.toString())
+    }
+  })
+
   /* socket.on('disconnect', () => {
     console.log('user disconnected')
   }) */
