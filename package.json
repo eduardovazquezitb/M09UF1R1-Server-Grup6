@@ -12,10 +12,10 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "body-parser": "^1.20.2",
     "eslint": "^8.39.0",
     "express": "^4.18.2",
     "nodemon": "^2.0.22",
+    "socket.io": "^4.6.1",
     "standard": "^17.0.0"
   }
 }
