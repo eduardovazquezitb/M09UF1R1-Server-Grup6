@@ -27,7 +27,6 @@ io.use((socket, next) => {
   if (Object.keys(query).includes('superuser')) {
     query.superuser = JSON.parse(query.superuser)
   }
-  console.log(query)
   switch (query.querytype) {
     case 'authentication': {
       const result = auth.authenticate(query)
@@ -47,7 +46,6 @@ io.use((socket, next) => {
 })
 
 io.on('connection', (socket) => {
-  console.log('user connected')
   socket.emit('ping', { message: 'mafia-clicker', version: '1.0.0' })
 
   socket.on('user', (data) => {
@@ -114,7 +112,7 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('disconnect', () => {
-    console.log('user disconnected')
-  })
+  // socket.on('disconnect', () => {
+  //  console.log('user disconnected')
+  // })
 })
