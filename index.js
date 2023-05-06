@@ -17,6 +17,7 @@ server.listen(PORT, () => {
 })
 
 const SomethingWentWrong = { status: false, error: 500, message: 'Internal Error' }
+const InvalidCredentials = { status: false, error: 422, message: 'Invalid Credentials' }
 
 // Connection is stablished on authentication.
 // When connection is broken authentication is lost. (to do on client)
@@ -26,23 +27,27 @@ io.use((socket, next) => {
   if (Object.keys(query).includes('superuser')) {
     query.superuser = JSON.parse(query.superuser)
   }
+  console.log(query)
   switch (query.querytype) {
     case 'authentication': {
       const result = auth.authenticate(query)
-      if (result.status) { return next() }
+      console.log(result)
+      if (result.status && result.data.isUser) { return next() }
+      if (result.status && !result.data.isUser) { return next(getError(InvalidCredentials)) }
       return next(getError(result))
     }
     case 'newUser': {
       const result = auth.createNewUser(query)
-      if (result.status) { return next(new Error(result.data.newusername)) } // Disconnects immediately
+      if (result.status) { return next() }
       return next(getError(result))
     }
     default:
-      return getError(SomethingWentWrong)
+      return next(getError(SomethingWentWrong))
   }
 })
 
 io.on('connection', (socket) => {
+  console.log('user connected')
   socket.emit('ping', { message: 'mafia-clicker', version: '1.0.0' })
 
   socket.on('user', (data) => {
@@ -109,7 +114,7 @@ io.on('connection', (socket) => {
     }
   })
 
-  /* socket.on('disconnect', () => {
+  socket.on('disconnect', () => {
     console.log('user disconnected')
-  }) */
+  })
 })
