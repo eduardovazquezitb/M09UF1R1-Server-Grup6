@@ -30,7 +30,6 @@ io.use((socket, next) => {
   switch (query.querytype) {
     case 'authentication': {
       const result = auth.authenticate(query)
-      console.log(result)
       if (result.status && result.data.isUser) { return next() }
       if (result.status && !result.data.isUser) { return next(getError(InvalidCredentials)) }
       return next(getError(result))
