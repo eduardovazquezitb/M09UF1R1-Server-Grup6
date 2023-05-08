@@ -1,5 +1,6 @@
 const example =
 {
+  username: 'name',
   mail: 'email@gmail.com',
   score: 0
 }
